@@ -1,109 +1,56 @@
 # -*- coding: utf-8 -*-
 """
-Редактор Spyder
+Created on Sun Feb 26 23:34:57 2017
 
-Это временный скриптовый файл.
+@author: Mikhail Belousov
 """
-documents = [
-        {"type": "passport", "number": "2207 876234", "name": "Василий Гупкин"},
-        {"type": "invoice", "number": "11-2", "name": "Геннадий Покемонов"},
-        {"type": "insurance", "number": "10006", "name": "Аристарх Павлов"}
-      ]
 
-directories = {
-        '1': ['2207 876234', '11-2'],
-        '2': ['10006'],
-        '3': []
-      }
+# яичница  яйца 2 шт, помидор 100 г
+# стейк 300 г мяса, 5 г специи, 10 мл масло
+# салат помидоры 100 г, огурцы 100 г, масло 100 мл, лук 1 шт
 
-def main ():
+#dishes = ["яичница", "стейк", "стейк"]
 
 
-    commands = {
-    'a' : add_command,
-    'l' : list_command,
-    'p' : person_command,
-    's' : shelf_command
-    }
+cook_book = {
+	"яичница":[
+	        {"ingredient_name" : "яйца", "quantity" : 2, "measure" : "шт."},
+	        {"ingredient_name" : "помидоры", "quantity" : 100, "measure" : "г"},
+	          ],
+	"стейк":[
+	        {"ingredient_name" : "говядина", "quantity" : 300, "measure" : "г"},
+	        {"ingredient_name" : "специи", "quantity" : 5, "measure" : "г"},
+	        {"ingredient_name" : "масло", "quantity" : 10, "measure" : "мл"}
+	          ],
+	"салат":[
+	        {"ingredient_name" : "помидоры", "quantity" : 100, "measure" : "г"},
+	        {"ingredient_name" : "огурцы", "quantity" : 100, "measure" : "г"},
+	        {"ingredient_name" : "масло", "quantity" : 100, "measure" : "мл"},
+	        {"ingredient_name" : "лук", "quantity" : 1, "measure" : "шт."}
+		        ]
+		        }
 
-    check_flag = True
+def get_shop_list_by_dishes (dishes, person_count):
+  shop_list = {}
 
-    while check_flag:
-#        commands.get(input_code ()) () # два варианта  одинаковы
-        commands[input_code()]()
-        confirm = input ('Для продолжения нажмите Y\n>>')
-        check_flag = False if confirm != 'Y' else True
+  for dish in dishes:
+    for ingredient in cook_book[dish]:
+      new_shop_list_item = dict (ingredient)
+      new_shop_list_item["quantity"] *= person_count
+      if new_shop_list_item["ingredient_name"] not in shop_list:
+        shop_list[new_shop_list_item["ingredient_name"]] = new_shop_list_item
+      else:
+        shop_list[new_shop_list_item["ingredient_name"]]["quantity"] += new_shop_list_item ["quantity"]
+  return shop_list
 
+def print_shop_list (shop_list):
+  for shop_list_item in shop_list.values():
+    print ("{ingredient_name} {quantity} {measure}".format (**shop_list_item))
 
+def create_shop_list ():
+  person_count = int (input ("Введите количество человек >>"))
+  dishes = input ("Введите блюда в расчете на одного человека (через запятую) >>").lower().split (', ')
+  shop_list = get_shop_list_by_dishes (dishes, person_count)
+  print_shop_list (shop_list)
 
-def input_code ():
-    '''
-    command input
-    returns a command code
-    '''
-
-    command = ' '
-    check_list = ['a','l', 'p', 's']
-    while command not in check_list:
-        print ('Введите команду')
-        command = input ('>> ')
-    return command
-
-def add_command ():
-    '''
-    adds a specified document to the database
-    asks for
-    type - str
-    number - str
-    name - str
-    shelf - str
-    '''
-
-    type = input ('Введите тип документа\n>> ')
-    number = input ('Введите номер документа\n>> ')
-    name = input ('Введите имя \n>> ')
-    shelf = (input ('На какую полку положить документ?\n>>'))
-
-    documents.append ({"type": type, "number": number, "name": name})
-    if shelf not in directories:
-        directories[shelf] = []
-    directories[shelf].append (number)
-
-def list_command ():
-    '''
-    lists all existing documnents
-    '''
-
-    for document in documents:
-        print ('{0}, "{1}", "{2}"'.format (document['type'], document['number'], document['name']))
-
-def person_command ():
-    '''
-    prints person's name if such exist
-    asks for
-    number - str
-    '''
-
-    number = input ('Введите номер документа\n>> ')
-    check_flag = False
-    for document in documents:
-        if number in document.values():
-            print (document['name'])
-            check_flag = True
-    if check_flag == False:
-        print ('Неверный номер документа')
-
-def shelf_command ():
-    '''
-    prints the shelf where the document is kept
-    asks for
-    number - str
-    '''
-    number = input ('Введите номер документа\n>> ')
-    check_flag = False
-    for shelf in directories.keys():
-        if number in directories[shelf]:
-            print ('Документ лежит на полке номер %s' %(shelf))
-            check_flag = True
-    if check_flag == False:
-        print ('Неверный номер документа')
+create_shop_list ()
