@@ -12,23 +12,47 @@ Created on Sun Feb 26 23:34:57 2017
 #dishes = ["яичница", "стейк", "стейк"]
 
 
-cook_book = {
-	"яичница":[
-	        {"ingredient_name" : "яйца", "quantity" : 2, "measure" : "шт."},
-	        {"ingredient_name" : "помидоры", "quantity" : 100, "measure" : "г"},
-	          ],
-	"стейк":[
-	        {"ingredient_name" : "говядина", "quantity" : 300, "measure" : "г"},
-	        {"ingredient_name" : "специи", "quantity" : 5, "measure" : "г"},
-	        {"ingredient_name" : "масло", "quantity" : 10, "measure" : "мл"}
-	          ],
-	"салат":[
-	        {"ingredient_name" : "помидоры", "quantity" : 100, "measure" : "г"},
-	        {"ingredient_name" : "огурцы", "quantity" : 100, "measure" : "г"},
-	        {"ingredient_name" : "масло", "quantity" : 100, "measure" : "мл"},
-	        {"ingredient_name" : "лук", "quantity" : 1, "measure" : "шт."}
-		        ]
-		        }
+#cook_book = {
+#    "яичница":[
+#            {"ingredient_name" : "яйца", "quantity" : 2, "measure" : "шт."},
+#            {"ingredient_name" : "помидоры", "quantity" : 100, "measure" : "г"},
+#              ],
+#    "стейк":[
+#            {"ingredient_name" : "говядина", "quantity" : 300, "measure" : "г"},
+#            {"ingredient_name" : "специи", "quantity" : 5, "measure" : "г"},
+#            {"ingredient_name" : "масло", "quantity" : 10, "measure" : "мл"}
+#              ],
+#    "салат":[
+#            {"ingredient_name" : "помидоры", "quantity" : 100, "measure" : "г"},
+#            {"ingredient_name" : "огурцы", "quantity" : 100, "measure" : "г"},
+#            {"ingredient_name" : "масло", "quantity" : 100, "measure" : "мл"},
+#            {"ingredient_name" : "лук", "quantity" : 1, "measure" : "шт."}
+#                ]
+#                }
+cook_book = {}
+
+def write_recipe (recipe):
+    dish_name = recipe[0].lower().strip()
+    cook_book[dish_name] = []
+    ingredients_quantity = int (recipe[1])
+    for index in range (ingredients_quantity):
+        ingredient = recipe[index+2].split('|')
+        cook_book[dish_name].append({"ingredient_name" : ingredient[0].lower().strip(), "quantity" : int (ingredient [1]), "measure" : ingredient[2].lower().strip()})
+
+def  get_recipes ():
+
+    with open ('recipes.txt', 'r') as recipes:
+        recipe = []
+        for index, entry in enumerate (recipes):
+            entry = entry.strip()
+            if entry == '':
+                write_recipe (recipe)
+                recipe = []
+            else:
+                recipe.append(entry)
+        write_recipe (recipe)
+
+
 
 def get_shop_list_by_dishes (dishes, person_count):
   shop_list = {}
@@ -53,4 +77,5 @@ def create_shop_list ():
   shop_list = get_shop_list_by_dishes (dishes, person_count)
   print_shop_list (shop_list)
 
+get_recipes ()
 create_shop_list ()
