@@ -1,13 +1,4 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Fri Feb 24 16:08:57 2017
-
-@author: Mikhail Belousov
-"""
-
-
-# import json
-# сделать версию через json.loads pprint
+import json
 
 def get_six_letter_word(json_string_entry):
     russian_letters = ''.join([chr(n) for n in range(1040, 1104)]) + 'Ёё'
@@ -39,12 +30,22 @@ def count_frequent(word_dict):
         most_frequent -= 1
     return frequent_words
 
+# json version
+# def get_new_entry(name, charset):
+#     with open(name, 'r', encoding=charset) as json_source:
+#         json_string = json_source.read()
+#     json_dict = json.loads(json_string)
+#     string_to_parse = []
+#     parsing_keys = ["['rss']['channel']['category']","['rss']['channel']['description']",
+#                     "['rss']['channel']['item'][0]"]
+#     string_to_parse = json_dict[parsing_keys[0]] + json_dict[parsing_keys[1]]
+#     for entry in json_dict
+#     return json_string
 
 def get_new_entry(name, charset):
     with open(name, 'r', encoding=charset) as json_source:
         json_string = json_source.read()
     return json_string
-
 
 def parser(parsing_string):
     word_dict = {}
@@ -57,6 +58,7 @@ def parser(parsing_string):
                 else:
                     word_dict[word] = 1
     return word_dict
+
 
 
 def print_results(news_entry, frequent_words):
