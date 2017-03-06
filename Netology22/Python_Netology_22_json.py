@@ -27,30 +27,20 @@ def get_six_letter_word(json_string_entry):
     return result_words
 
 
-def count_frequent(word_dict):
-    most_frequent = max(word_dict.values())
-    frequent_words = {}
-    counter = 0
-    while counter < 10:
-        for word, frequency in word_dict.items():
-            if frequency == most_frequent:
-                counter += 1
-                frequent_words[counter] = (most_frequent, word)
-        most_frequent -= 1
-    return frequent_words
+def count_top_ten(word_dict):
+    top_ten = sorted(word_dict.items(), key=lambda x: x[1],
+                      reverse=True)
+    return top_ten[0:10]
+
 
 def get_new_entry(name, charset):
     with open(name, 'r', encoding=charset) as json_source:
-        json_string = json.load(json_source)
+        json_dict = json.load(json_source)
     return json_dict
 
 
 def parser(parsing_dict):
-    path = parsing_dict['rss']['channel']['item']
-    news_text_string = ''
-    for index, entry in enumerate (path):
-        news_text_string += path[index]['description']['__cdata']
-        news_text_string += path[index]['title']['__cdata']
+    news_text_string = str(parsing_dict.values())
     word_dict = {}
     for entry in news_text_string.split():
         words = get_six_letter_word(entry)
@@ -63,10 +53,12 @@ def parser(parsing_dict):
     return word_dict
 
 
-def print_results(news_entry, frequent_words):
-    print('Список из 10 самых часто встречающихся слов в файле "{}"'.format(news_entry))
-    for counts, word in frequent_words.items():
-        print('{0:2}: {1:13}, встречается {2:2} раз'.format(counts, word[1], word[0]))
+def print_results(news_entry, top_ten):
+    print('Список из 10 самых часто встречающихся слов в файле "{}"\n'.
+          format(news_entry))
+    for index, word in enumerate(top_ten):
+        print('{0:2}.Слово "{1}", встречается {2} раз\n'.
+               format(index+1, word[0], word[1]))
 
 
 def check_encoding(news_file):
@@ -83,12 +75,11 @@ def main():
         whole_file_name = os.path.join(home_dir, file)
         if file.endswith('.json'):
             news_files.append(whole_file_name)
-
     for news_entry in news_files:
         charset = check_encoding(news_entry)
         parsing_dict = get_new_entry(news_entry, charset)
         word_dict = parser(parsing_dict)
-        frequent_words = count_frequent(word_dict)
-        print_results(news_entry, frequent_words)
+        top_ten = count_top_ten(word_dict)
+        print_results(news_entry, top_ten)
 
 main()

@@ -26,17 +26,10 @@ def get_six_letter_word(json_string_entry):
     return result_words
 
 
-def count_frequent(word_dict):
-    most_frequent = max(word_dict.values())
-    frequent_words = {}
-    counter = 0
-    while counter < 10:
-        for word, frequency in word_dict.items():
-            if frequency == most_frequent:
-                counter += 1
-                frequent_words[counter] = (most_frequent, word)
-        most_frequent -= 1
-    return frequent_words
+def count_top_ten(word_dict):
+    top_ten = sorted(word_dict.items(), key=lambda x: x[1],
+                      reverse=True)
+    return top_ten[0:10]
 
 
 def get_new_entry(name, charset):
@@ -58,10 +51,12 @@ def parser(parsing_string):
     return word_dict
 
 
-def print_results(news_entry, frequent_words):
-    print('Список из 10 самых часто встречающихся слов в файле "{}"'.format(news_entry))
-    for counts, word in frequent_words.items():
-        print('{0:2}: {1:13}, встречается {2:2} раз'.format(counts, word[1], word[0]))
+def print_results(news_entry, top_ten):
+    print('Список из 10 самых часто встречающихся слов в файле "{}"\n'.
+          format(news_entry))
+    for index, word in enumerate(top_ten):
+        print('{0:2}.Слово "{1}", встречается {2} раз\n'.
+               format(index+1, word[0], word[1]))
 
 
 def check_encoding(news_file):
@@ -83,7 +78,7 @@ def main():
         charset = check_encoding(news_entry)
         parsing_string = get_new_entry(news_entry, charset)
         word_dict = parser(parsing_string)
-        frequent_words = count_frequent(word_dict)
-        print_results(news_entry, frequent_words)
+        top_ten = count_top_ten (word_dict)
+        print_results(news_entry, top_ten)
 
 main()
