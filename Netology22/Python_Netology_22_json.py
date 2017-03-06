@@ -1,4 +1,13 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Wed Mar  1 02:06:13 2017
+
+@author: Mikhail Belousov
+"""
+import chardet
+import os
 import json
+
 
 def get_six_letter_word(json_string_entry):
     russian_letters = ''.join([chr(n) for n in range(1040, 1104)]) + 'Ёё'
@@ -30,26 +39,20 @@ def count_frequent(word_dict):
         most_frequent -= 1
     return frequent_words
 
-# json version
-# def get_new_entry(name, charset):
-#     with open(name, 'r', encoding=charset) as json_source:
-#         json_string = json_source.read()
-#     json_dict = json.loads(json_string)
-#     string_to_parse = []
-#     parsing_keys = ["['rss']['channel']['category']","['rss']['channel']['description']",
-#                     "['rss']['channel']['item'][0]"]
-#     string_to_parse = json_dict[parsing_keys[0]] + json_dict[parsing_keys[1]]
-#     for entry in json_dict
-#     return json_string
-
 def get_new_entry(name, charset):
     with open(name, 'r', encoding=charset) as json_source:
-        json_string = json_source.read()
-    return json_string
+        json_string = json.load(json_source)
+    return json_dict
 
-def parser(parsing_string):
+
+def parser(parsing_dict):
+    path = parsing_dict['rss']['channel']['item']
+    news_text_string = ''
+    for index, entry in enumerate (path):
+        news_text_string += path[index]['description']['__cdata']
+        news_text_string += path[index]['title']['__cdata']
     word_dict = {}
-    for entry in parsing_string.split():
+    for entry in news_text_string.split():
         words = get_six_letter_word(entry)
         if words:
             for word in words:
@@ -60,23 +63,32 @@ def parser(parsing_string):
     return word_dict
 
 
-
 def print_results(news_entry, frequent_words):
     print('Список из 10 самых часто встречающихся слов в файле "{}"'.format(news_entry))
     for counts, word in frequent_words.items():
         print('{0:2}: {1:13}, встречается {2:2} раз'.format(counts, word[1], word[0]))
 
 
+def check_encoding(news_file):
+    rawdata = open(news_file, "rb").read()
+    result = chardet.detect(rawdata)
+    open(news_file).close()
+    return result['encoding']
+
+
 def main():
-    encoding_dict = {'newsafr.json': 'utf8',
-                     'newscy.json': 'koi8_r',
-                     'newsfr.json': 'iso8859_5',
-                     'newsit.json': 'cp1251'}
-    for news_entry, charset in encoding_dict.items():
-        parsing_string = get_new_entry(news_entry, charset)
-        word_dict = parser(parsing_string)
+    home_dir = os.getcwd()  # put files in home dir by default
+    news_files = []
+    for file in os.listdir(home_dir):
+        whole_file_name = os.path.join(home_dir, file)
+        if file.endswith('.json'):
+            news_files.append(whole_file_name)
+
+    for news_entry in news_files:
+        charset = check_encoding(news_entry)
+        parsing_dict = get_new_entry(news_entry, charset)
+        word_dict = parser(parsing_dict)
         frequent_words = count_frequent(word_dict)
         print_results(news_entry, frequent_words)
-
 
 main()
