@@ -6,6 +6,7 @@ Created on Sun Feb 26 23:34:57 2017
 """
 
 import yaml
+import json
 
 # cook_book = {
 #    "яичница":[
@@ -34,7 +35,9 @@ def get_yaml(file_name):
 
 
 def get_json(file_name):
-    pass
+    with open(file_name, 'r', encoding='utf8') as recipes_json:
+        cook_book = json.load(recipes_json)
+    return cook_book
 
 
 def get_csv(file_name):
@@ -69,6 +72,7 @@ def print_shop_list(shop_list):
 
 
 def create_shop_list(cook_book):
+    print ("Доступные блюда:", ' \n'.join([dish for dish in cook_book.keys()]))
     person_count = int(input("Введите количество человек >>"))
     input_flag = False
     while not input_flag:
@@ -83,7 +87,7 @@ def create_shop_list(cook_book):
 
 def main ():
     print ("Учебная программа для изучения форматов данных.\n")
-    chosen_format = input ("Выберите тип файла (yaml\json\csv\)n>>").lower()
+    chosen_format = input ("Выберите тип файла (yaml\json\csv)\n>>").lower()
     create_shop_list (get_recipes (chosen_format))
 
 main ()

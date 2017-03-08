@@ -32,7 +32,6 @@ def store_recipe(recipe):
     for index in range(ingredients_quantity):
         ingredient = recipe[index+2].split('|')
         cook_book_entry[dish_name].append({"ingredient_name": ingredient[0].lower().strip(), "quantity": int(ingredient[1]), "measure": ingredient[2].lower().strip()})
-#        print (cook_book_entry) #check
     return cook_book_entry
 
 def get_recipes():
@@ -47,7 +46,6 @@ def get_recipes():
             else:
                 recipe.append(entry)
         cook_book.update(store_recipe(recipe))
-        print (cook_book)
     return cook_book
 
 

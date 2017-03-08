@@ -29,8 +29,8 @@ def get_six_letter_word(json_string_entry):
 
 def count_top_ten(word_dict):
     top_ten = sorted(word_dict.items(), key=lambda x: x[1],
-                      reverse=True)
-    return top_ten[0:10]
+              reverse=True)[0:10]
+    return top_ten
 
 
 def get_new_entry(name, charset):
