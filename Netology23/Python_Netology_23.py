@@ -5,6 +5,8 @@ Created on Sun Feb 26 23:34:57 2017
 @author: Mikhail Belousov
 """
 
+"""базовая версия, данные читаются с форматов json\yaml"""
+
 import yaml
 import json
 
@@ -87,7 +89,7 @@ def create_shop_list(cook_book):
 
 def main ():
     print ("Учебная программа для изучения форматов данных.\n")
-    chosen_format = input ("Выберите тип файла (yaml\json\csv)\n>>").lower()
+    chosen_format = input ("Выберите тип файла (yaml\json\n>>").lower()
     create_shop_list (get_recipes (chosen_format))
 
 main ()
