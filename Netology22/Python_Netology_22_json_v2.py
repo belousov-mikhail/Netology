@@ -15,6 +15,7 @@ def check_encoding(news_file):
     open(news_file).close()
     return result['encoding']
 
+
 def get_new_entry(name, charset):
     with open(name, 'r', encoding=charset) as json_source:
         json_dict = json.load(json_source)
@@ -24,7 +25,7 @@ def get_new_entry(name, charset):
 def decoding_json(from_json_data, data_type, storage):
     if data_type == dict:
         for value in from_json_data.values():
-            decoding_json (value, type(value), storage)
+            decoding_json(value, type(value), storage)
     elif data_type == list:
         for value in from_json_data:
             decoding_json(value, type (value), storage)
