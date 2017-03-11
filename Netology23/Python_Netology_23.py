@@ -49,8 +49,8 @@ def get_recipes(chosen_format):
     formats_dict = {'yaml': lambda: get_yaml(file_name),
                   'json': lambda: get_json(file_name),
                   'csv': lambda: get_csv(file_name)}
-    cook_book ={}
-    file_name = 'recipes.'+chosen_format
+    cook_book = {}
+    file_name = 'recipes.' + chosen_format
     cook_book = formats_dict[chosen_format]()
     return cook_book
 
@@ -89,7 +89,7 @@ def create_shop_list(cook_book):
 
 def main ():
     print ("Учебная программа для изучения форматов данных.\n")
-    chosen_format = input ("Выберите тип файла (yaml\json\n>>").lower()
+    chosen_format = input ("Выберите тип файла (yaml\json)\n>>").lower()
     create_shop_list (get_recipes (chosen_format))
 
 main ()

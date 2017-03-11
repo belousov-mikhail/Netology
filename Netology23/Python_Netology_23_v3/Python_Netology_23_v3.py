@@ -4,29 +4,17 @@ Created on Sun Feb 26 23:34:57 2017
 
 @author: Mikhail Belousov
 """
-"""в этой версии
-- чтение рецептов из json\yaml
-- функция добавления нового рецепта, чтобы протестировать запись
-- запись словаря с новым рецептом сразу в файлы всех форматов
-(сейчас json\yaml)
 """
-import yaml
-import json
-import codecs
-
-# for csv on Windows, you need to pass a blank string for the open() function’s newline keyword argument
-
-def get_recipes(data_type):
-    modules = {'yaml': yaml,
-                  'json': json}
-    cook_book = {}
-    file_name = 'recipes.'+data_type
-    with open(file_name, 'r', encoding='utf') as recipes:
-        cook_book = modules[data_type].load(recipes)
-    return cook_book
+in this bulid:
+- handles json\yaml\csv
+- able to add new recipes
+- add and erase new recipes in json\yaml\csv
+"""
+import os
+from helper_functions import *
 
 
-def add_new_recipe(cook_book, data_type):
+def add_new_recipe(cook_book, datatype):
     dish_name = input("Введите название блюда\n>>").lower()
     cook_book_entry = {}
     cook_book_entry[dish_name] = []
@@ -39,12 +27,8 @@ def add_new_recipe(cook_book, data_type):
         cook_book_entry[dish_name].append({'ingredient_name': ingredient_name,
                        'measure': measure, 'quantity': quantity})
         cook_book.update(cook_book_entry)
-    with codecs.open('recipes.yaml', 'w', encoding='utf-8', errors='ignore') as recipes:
-        yaml.dump(cook_book, recipes, allow_unicode=True)
-
-    with codecs.open('recipes.json', 'w', encoding='utf-8', errors='ignore') as recipes:
-        json.dump(cook_book, recipes, ensure_ascii=False)
-    return get_recipes (data_type)
+        do_formatted_files(cook_book)
+    return get_recipes (datatype)
 
 
 def get_shop_list_by_dishes(cook_book, dishes, person_count):
@@ -80,18 +64,51 @@ def create_shop_list(cook_book):
     print_shop_list(shop_list)
     return
 
-def main ():
-    print ("Учебная программа для изучения форматов данных.\n")
+
+def program_menu():
+# commands for main menu
+    commands = {
+            '1': lambda: add_new_recipe(get_recipes(datatype), datatype),
+            '2': lambda: create_shop_list(get_recipes(datatype)),
+            '3':  lambda: do_formatted_files (get_provided_recipes())}
+    supported_types = ('json', 'yaml', 'csv')
+# some fool-proof to escape misinputs while testing
     while True:
-        print ("1 - добавить блюдо,\n2 - распечатать список покупок")
+        print("----------")
+        print("1 - добавить блюдо")
+        print("2 - распечатать список покупок")
+        print("3 - удалить добавленные рецепты")
+        print("----------")
         chosen_action = input('>>')
-        data_type = input ("Выберите тип файла (yaml\json)\n>>").lower()
-        if chosen_action == '1':
-            cook_book = add_new_recipe (get_recipes(data_type), data_type)
-        else:
-            create_shop_list(get_recipes(data_type))
-        user_input = input ('Для продолжения нажмите Д\n>>')
+        if chosen_action not in ['1', '2', '3']:
+            chosen_action = '2'
+        if chosen_action != '3':
+            datatype = input("Введите тип файла (yaml\json\csv)\n>>").lower()
+            print("----------")
+            datatype = datatype if datatype in supported_types else 'yaml'
+        commands[chosen_action]()
+        user_input = input('Для продолжения нажмите Д\n>>')
         if user_input != 'Д':
             break
 
-main ()
+
+def main():
+# check whether the home dir has formatted files:
+    print("Учебная программа для изучения форматов данных.\n")
+    home_dir = os.getcwd()
+    recipe_files = ['recipes.json', 'recipes.csv', 'recipes.yaml']
+    exist_flag = True
+    for file in recipe_files:
+        exist_flag = exist_flag and (file in os.listdir(home_dir))
+# if no files, create then form provided txt
+    if not exist_flag:
+        print("Не обнаружены файлы изучаемых форматов.\n")
+        print("Создание файлов.\n")
+        cook_book = get_provided_recipes()
+        do_formatted_files(cook_book)
+# main menu loop
+    program_menu()
+
+
+if __name__ == '__main__':
+    main ()
