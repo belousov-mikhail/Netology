@@ -8,7 +8,6 @@ import json
 import yaml
 import csv
 import ast
-import codecs
 
 
 #this block builds cook_book from recipes.txt

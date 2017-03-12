@@ -11,7 +11,7 @@ in this bulid:
 - add and erase new recipes in json\yaml\csv
 """
 import os
-from helper_functions import *
+from helper_functions import store_recipe, get_provided_recipes, do_formatted_files, get_recipes
 
 
 def add_new_recipe(cook_book, datatype):
@@ -54,7 +54,7 @@ def create_shop_list(cook_book):
     person_count = int(input("Введите количество человек >>"))
     input_flag = False
     while not input_flag:
-        dishes = input("Введите блюда в расчете на одного человека (через запятую)\n>>").lower().split(', ')
+        dishes = input("Введите блюда в расчете на одного человека (через пробел)\n>>").lower().split(' ')
         for dish in dishes:
             input_flag = dish in cook_book.keys()
             if not input_flag:

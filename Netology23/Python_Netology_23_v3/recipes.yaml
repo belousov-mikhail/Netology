@@ -1,0 +1,23 @@
+котлеты:
+- {ingredient_name: яйца, measure: шт, quantity: 1}
+- {ingredient_name: фарш, measure: г, quantity: 200}
+- {ingredient_name: лук репчатый, measure: шт, quantity: 1}
+- {ingredient_name: картофель, measure: г, quantity: 100}
+омлет:
+- {ingredient_name: яйца, measure: шт, quantity: 2}
+- {ingredient_name: молоко, measure: г, quantity: 50}
+- {ingredient_name: помидор, measure: шт, quantity: 100}
+пицца:
+- {ingredient_name: мука, measure: г, quantity: 300}
+- {ingredient_name: сыр, measure: г, quantity: 50}
+- {ingredient_name: помидоры, measure: шт., quantity: 2}
+- {ingredient_name: креветки, measure: г, quantity: 100}
+- {ingredient_name: кефир, measure: бут., quantity: 1}
+салат:
+- {ingredient_name: помидоры, measure: шт, quantity: 2}
+- {ingredient_name: огурцы, measure: шт, quantity: 3}
+- {ingredient_name: масло, measure: мл, quantity: 10}
+- {ingredient_name: лук репчатый, measure: шт, quantity: 1}
+толченка:
+- {ingredient_name: картофель, measure: г, quantity: 200}
+- {ingredient_name: молоко, measure: г, quantity: 50}
