@@ -69,7 +69,7 @@ def downloadFromSavemedia(url, driver, clip_link, number):
         submit_button = driver.find_element_by_id('download-submit')
         submit_button.click()
 
-        #get a page euth download options, parse link to auto download
+        #get a page with download options, parse link to auto download
         #it's name is wrapper_link
         driver.implicitly_wait(6)
         download_button = driver.find_element_by_id("get_video")
