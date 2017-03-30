@@ -24,7 +24,7 @@ def addToGlobal(global_dict, to_add):
     return(global_dict)
 
 
-def addMoreFriends(graph, start_node, friends):
+def friendsToGraph(graph, start_node, friends):
     edges_to_add = [(start_node, el) for el in friends]
     graph.add_edges_from(edges_to_add)
     return graph
@@ -40,7 +40,7 @@ def printTop (global_dict, most_popular):
     print ('Список из {} человек с максимальным количеством пересечений'.format(len(most_popular)))
     for el in most_popular:
         id = el[0]
-        print ("{0} {1} связан(а) с {2} человек".format(global_dict[id][0], global_dict[id][1], el[1]))
+        print ("{0} {1} связан(а) с {2} человек, id={3}".format(global_dict[id][0], global_dict[id][1], el[1], id))
 
 
 def main():
@@ -50,20 +50,20 @@ def main():
     host_data = vkapi.users.get(user_id=HOST_ID, fields='domain')[0]
     host = (HOST_ID, host_data['last_name'], host_data['first_name'])
     global_dict = {}
-    g = nx.Graph()
     global_dict[host[0]] = (host[1], host[2])
+    g = nx.Graph()
     host_friends = getFriendsList(vkapi, HOST_ID)
     global_dict = addToGlobal(global_dict, host_friends)
-    g.add_node(host)
-    g = addMoreFriends(g, host, host_friends)
+    g = friendsToGraph(g, host[0], host_friends)
     for el in host_friends:
         more_friends = getFriendsList(vkapi, el[0])
         global_dict = addToGlobal(global_dict, more_friends)
-        g = addMoreFriends(g, el[0], more_friends)
+        g = friendsToGraph(g, el[0], more_friends)
     print (nx.info(g))
     limit = int (input ("Какое количество самых популярных друзей вывести?\n>>"))
-    most_popular = mostPopular(g, limit)
+    most_popular = mostPopular(g, 50)
     printTop(global_dict, most_popular)
+
 
 
 
