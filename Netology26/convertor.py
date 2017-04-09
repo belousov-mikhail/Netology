@@ -17,7 +17,7 @@ for file in os.listdir(source_dir):
         source_file = os.path.join(source_dir, file)
         result_file = os.path.join(output_dir, file)
         command = 'convert.exe '+ source_file + ' -resize 200 ' + result_file
-        resize=subprocess.Popen(command)
+        subprocess.run(command)
 
 
 
