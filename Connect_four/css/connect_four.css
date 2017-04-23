@@ -1,0 +1,38 @@
+.jumbotron{
+  text-align: center;
+  color: #073142;
+  height: 200px;
+}
+
+#status{
+  visibility: hidden;
+}
+
+#board{
+  margin: auto;
+}
+
+.chip{
+  width: 90px;
+  height: 90px;
+  background: white;
+}
+
+.circleShape{
+  width:87px;
+  height: 87px;
+  border-radius: 100%;
+  border: 2px solid #292b2d;
+}
+
+.circleInitial{
+  background-color: #968484;
+}
+
+.circlePlayerOne{
+  background-color: #1628ad;
+}
+
+.circlePlayerTwo{
+  background-color: #e02626;
+}
