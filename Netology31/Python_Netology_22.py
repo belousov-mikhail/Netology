@@ -28,7 +28,7 @@ def decoding_json(from_json_data, data_type, storage):
             decoding_json(value, type(value), storage)
     elif data_type == list:
         for value in from_json_data:
-            decoding_json(value, type (value), storage)
+            decoding_json(value, type(value), storage)
     else:
         storage.append(from_json_data)
     return storage
@@ -67,7 +67,7 @@ def get_six_letter_word(json_string_entry):
 
 def count_top_ten(word_dict):
     top_ten = sorted(word_dict.items(), key=lambda x: x[1],
-              reverse=True)[0:10]
+                     reverse=True)[0:10]
     return top_ten
 
 
@@ -76,7 +76,7 @@ def print_results(news_entry, top_ten):
           format(news_entry))
     for index, word in enumerate(top_ten):
         print('{0:2}.Слово "{1}", встречается {2} раз\n'.
-               format(index + 1, word[0], word[1]))
+              format(index + 1, word[0], word[1]))
 
 
 def main():
@@ -89,9 +89,10 @@ def main():
     for news_entry in news_files:
         charset = check_encoding(news_entry)
         dict_to_parse = get_new_entry(news_entry, charset)
-        parsed_json_list  = decoding_json(dict_to_parse, type(dict_to_parse), [])
+        parsed_json_list = decoding_json(dict_to_parse, type(dict_to_parse), [])
         word_dict = get_word_dict(parsed_json_list)
         top_ten = count_top_ten(word_dict)
         print_results(news_entry, top_ten)
+
 
 main()
